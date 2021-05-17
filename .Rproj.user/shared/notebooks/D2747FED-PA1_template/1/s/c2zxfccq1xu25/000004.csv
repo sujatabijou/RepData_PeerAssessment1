@@ -1,0 +1,1 @@
+"0","hist(newsteps.sum$steps,main=""Total Number of Steps per Day Histogram w/o NA"",xlab=""Total Number of Steps per Day"")"

@@ -7,23 +7,60 @@ output:
 
 Here is my submission for the reproducible research peer assessment 1
 
-```{r packages, echo = TRUE,results='hide'}
+
+```r
 library(lubridate)
+```
+
+```
+## 
+## Attaching package: 'lubridate'
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     date, intersect, setdiff, union
+```
+
+```r
 library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 library(ggplot2)
 ```
 
 
 ## Loading and preprocessing the data
 
-```{r load, echo = TRUE}
+
+```r
 activity <- read.csv("activity.csv", na.strings="NA")
 
 activity$date <- as.Date(activity$date)
 ```
 
 ## What is mean total number of steps taken per day?
-```{r, echo = TRUE}
+
+```r
 steps.sum <- aggregate(x = activity["steps"],
                      FUN = sum,
                      by = list(Group.date = activity$date))
@@ -31,20 +68,25 @@ steps.sum <- aggregate(x = activity["steps"],
 hist(steps.sum$steps,main="Total Number of Steps per Day Histogram",xlab="Total Number of Steps per Day")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
 
-```{r, echo = TRUE}
+
+
+```r
 mean <- mean(steps.sum$steps, na.rm=TRUE)
 ```
 
-The mean number of steps is `r mean`.
-```{r, echo = TRUE}
+The mean number of steps is 1.0766189\times 10^{4}.
+
+```r
 median <-median(steps.sum$steps, na.rm=TRUE)
 ```
-The median number of steps is `r median`.
+The median number of steps is 10765.
 
 ## What is the average daily activity pattern?
 
-```{r, echo = TRUE}
+
+```r
 steps.interval <- aggregate(x = activity["steps"],
                      FUN = mean,
                      by = list(Group.interval = activity$interval),
@@ -55,21 +97,26 @@ plot(steps.interval$Group.interval, steps.interval$steps, type = "l", xlab="Inte
 abline(v=steps.interval$Group.interval[which.max(steps.interval$steps)], col="red")
 ```
 
-```{r, echo = TRUE}
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+
+```r
 interval<-steps.interval$Group.interval[which.max(steps.interval$steps)]
 ```
 
-The 5-minute interval with the maximum number of steps is `r interval`.
+The 5-minute interval with the maximum number of steps is 835.
 
 ## Imputing missing values
 
-```{r, echo = TRUE}
+
+```r
 numberna <- sum(is.na(activity))
 ```
 
-The total number of NA is `r numberna`.
+The total number of NA is 2304.
 
-```{r}
+
+```r
 new <- activity
 for (i in steps.interval$Group.interval) {
   new[new$interval == i & is.na(new$steps), ]$steps <- steps.interval$steps[steps.interval$Group.interval == i]
@@ -77,38 +124,50 @@ for (i in steps.interval$Group.interval) {
 sum(is.na(new))
 ```
 
+```
+## [1] 0
+```
 
-```{r, echo = TRUE}
+
+
+```r
 newsteps.sum <- aggregate(x = new["steps"],
                      FUN = sum,
                      by = list(Group.date = new$date))
 ```
 
 
-```{r, echo = TRUE}
+
+```r
 hist(newsteps.sum$steps,main="Total Number of Steps per Day Histogram w/o NA",xlab="Total Number of Steps per Day")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
-```{r, echo = TRUE}
+
+
+```r
 newmean <- mean(newsteps.sum$steps, na.rm=TRUE)
 ```
 
-The mean number of steps is `r newmean` when calculated without missing values.
-```{r, echo = TRUE}
+The mean number of steps is 1.0766189\times 10^{4} when calculated without missing values.
+
+```r
 newmedian <-median(newsteps.sum$steps, na.rm=TRUE)
 ```
-The median number of steps is `r newmedian` when calculated without missing values.
+The median number of steps is 1.0766189\times 10^{4} when calculated without missing values.
 
 Imputing missing data increases the total number of steps but does not impact the mean or the median. 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r, echo = TRUE}
+
+```r
 new$week <- ifelse(weekdays(new$date) %in% c("Saturday", "Sunday"), "weekend", "weekday")
 ```
 
-```{r, echo = TRUE}
+
+```r
 new.interval <- aggregate(x = new["steps"],
                      FUN = mean,
                      by = list(Group.interval = new$interval,Group.week=new$week),
@@ -122,3 +181,5 @@ ggplot(data = new.interval)+
   facet_grid(Group.week~.)+
   labs(title= "Average Steps Per Interval by Days",x="Interval", y="Average Steps") 
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-13-1.png)<!-- -->

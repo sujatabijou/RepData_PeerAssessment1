@@ -1,0 +1,5 @@
+"0","steps.sum <- aggregate(x = activity[""steps""],"
+"0","                     FUN = sum,"
+"0","                     by = list(Group.date = activity$date))"
+"0",""
+"0","hist(steps.sum$steps,main=""Total Number of Steps per Day Histogram"",xlab=""Total Number of Steps per Day"")"

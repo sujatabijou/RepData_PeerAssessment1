@@ -1,0 +1,3 @@
+"0","activity <- read.csv(""activity.csv"", na.strings=""NA"")"
+"0",""
+"0","activity$date <- as.Date(activity$date)"

@@ -1,0 +1,3 @@
+"0","newsteps.sum <- aggregate(x = new[""steps""],"
+"0","                     FUN = sum,"
+"0","                     by = list(Group.date = new$date))"

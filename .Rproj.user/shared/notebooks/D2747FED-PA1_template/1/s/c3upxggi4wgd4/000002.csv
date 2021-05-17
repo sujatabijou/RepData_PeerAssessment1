@@ -1,0 +1,1 @@
+"0","newmean <- mean(newsteps.sum$steps, na.rm=TRUE)"
